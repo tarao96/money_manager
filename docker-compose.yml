@@ -1,0 +1,66 @@
+version: '3.9'
+
+services:
+  # nginx
+  nginx:
+    image: nginx:1.19-alpine
+    container_name: nginx_server
+    ports:
+      - 8000:80
+    environment:
+      TZ: Asia/Tokyo
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - api
+
+  # API
+  api:
+    container_name: back_api
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    volumes:
+      - ./back_api:/var/www/html
+    environment:
+      TZ: Asia/Tokyo
+    expose:
+      - 9000
+    tty: true
+
+  # database
+  database:
+    container_name: database
+    build:
+      context: .
+      dockerfile: docker/db/Dockerfile
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app_db
+      TZ: Asia/Tokyo
+    volumes:
+      - docker-db-mysql:/var/lib/mysql
+      - ./docker/db/sql:/docker-entrypoint-initdb.d
+
+  # 開発用DBエディタ
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8080:80
+    environment:
+      - PMA_HOSTS=database
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+
+  # 開発メールテスト用
+  mail:
+    image: mailhog/mailhog
+    container_name: mail
+    ports:
+      - 8025:8025
+
+volumes:
+  docker-db-mysql:
