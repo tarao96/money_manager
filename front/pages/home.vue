@@ -49,21 +49,6 @@
                 </div>
             </div>
 
-            <div class="money-sort-wrapper">
-                <h2>最近の大きな出費</h2>
-                <table class="table table-hover">
-                    <tbody>
-                        <tr v-for="category in categories" :key="category.id">
-                            <th>{{ category.name }}</th>
-                            <td>{{ category.value }}円</td>
-                            <td>{{ category.body }}</td>
-                            <td><button class="btn btn-success">編集</button></td>
-                            <td><button class="btn btn-danger">削除</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
             <div class="month-wrapper">
             <h2>今月の支出</h2>
             <div class="row justify-content-center">
@@ -83,10 +68,27 @@
             </div>
             </div>
 
-            <div class="month-transition-wrapper">
-                <h2>今月の入出金の推移</h2>
-                <div class="line-chart">
-                    <graph-chart></graph-chart>
+            <div class="analytics-wrapper">
+                <div class="money-sort-wrapper">
+                    <h2>最近の大きな出費</h2>
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr v-for="category in categories" :key="category.id">
+                                <th>{{ category.name }}</th>
+                                <td>{{ category.value }}円</td>
+                                <td>{{ category.body }}</td>
+                                <td><button class="btn btn-success">編集</button></td>
+                                <td><button class="btn btn-danger">削除</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="month-transition-wrapper">
+                    <h2>今月の入出金の推移</h2>
+                    <div class="line-chart">
+                        <graph-chart></graph-chart>
+                    </div>
                 </div>
             </div>
 
@@ -320,19 +322,6 @@ export default({
     }
 }
 
-.money-sort-wrapper {
-    margin: 100px 0;
-    text-align: center;
-    border: 2px solid black;
-    padding: 50px;
-    box-shadow: 5px 3px 3px rgba(189, 183, 183, 0.784);
-    background-color: #f2e6da42;
-    border-radius: 15px;
-    table {
-        margin-top: 50px;
-    }
-}
-
 .month-wrapper {
     margin-top: 100px;
     text-align: center;
@@ -345,17 +334,6 @@ export default({
         width: 40%;
         margin: 50px 0;
     }
-}
-
-.month-transition-wrapper {
-    margin-top: 100px;
-    text-align: center;
-    border: 2px solid black;
-    padding: 50px;
-    background-color: #fff;
-    box-shadow: 5px 3px 3px rgba(189, 183, 183, 0.784);
-    background-color: #f2e6da42;
-    border-radius: 15px;
 }
 
 .year-wrapper {
@@ -398,9 +376,30 @@ export default({
     margin: 0 auto;
 }
 
-.line-chart {
-    width: 80%;
-    margin: 50px auto;
+.analytics-wrapper {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 100px;
+    text-align: center;
+    border: 2px solid black;
+    padding: 50px 0;
+    background-color: #fff;
+    box-shadow: 5px 3px 3px rgba(189, 183, 183, 0.784);
+    background-color: #f2e6da42;
+    border-radius: 15px;
+}
+
+.money-sort-wrapper {
+    table {
+        margin-top: 50px;
+    }
+}
+
+.month-transition-wrapper {
+    text-align: center;
+    .line-chart {
+        margin: 50px auto;
+    }
 }
 
 .articles-wrapper {
