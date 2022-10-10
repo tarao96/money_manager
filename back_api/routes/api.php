@@ -28,4 +28,5 @@ Route::namespace('Auth')->group(function() {
 
 Route::middleware('auth:users')->group(function () {
     Route::get('/users', [App\Http\Controllers\UserController::class, 'index']);
+    Route::get('/articles', [App\Http\Controllers\ArticleController::class, 'response']);
 });

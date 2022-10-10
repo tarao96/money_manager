@@ -183,12 +183,15 @@
 
             <div class="articles-wrapper">
                 <h2>節約に関するおすすめ記事</h2>
-                <div class="article-contents">
-                    <div v-for="article in articles" :key="article.id" class="article-box">
-                        <img :src="article.img" alt="記事画像" />
-                        <a href="#">{{ article.title }}</a>
-                        <p>{{ article.body }}</p>
-                    </div>
+                <div class="article-inner">
+                    <article v-for="(article, index) in articles" :key="article.id">
+                        <!-- require('@/assets/images/image01.jpg') -->
+                        <img :src="require(`@/assets/images/image0${index + 1}.jpg`)" alt="記事画像" />
+                        <div class="article-text">
+                            <a :href="article.url">{{ article.title }}</a>
+                            <p>{{ article.body }}</p>
+                        </div>
+                    </article>
                 </div>
             </div>
 
@@ -198,6 +201,9 @@
 </template>
 
 <script>
+// axios
+import axios from "axios";
+
 // サイドバーコンポーネント
 import SideBar from "@/components/SideBar.vue";
 
@@ -227,7 +233,7 @@ export default({
                 {id: 7, name: '健康・医療'},
                 {id: 8, name: '自動車'}
             ],
-            categories: [
+            categories: [   
                 {id: 1, name: '食費', value: 2000, body: '昼食、夕食、お菓子'},
                 {id: 2, name: '日用品', value: 1000, body: '生理用品類'},
                 {id: 3, name: '趣味・娯楽', value: 1500, body: 'ポケカ代'},
@@ -237,22 +243,36 @@ export default({
                 {id: 7, name: '健康・医療', value: 3000, body: '美容化粧品類'},
                 {id: 8, name: '自動車', value: 4000, body: '駐車場代'}
             ],
-            articles: [
-                {id: 1, img: require('@/assets/images/image01.jpg'), title: '節約テクニック5選', body: '節約のテクニックを解説していきます。'},
-                {id: 2, img: require('@/assets/images/image02.jpg'), title: '節約テクニック5選', body: '節約のテクニックを解説していきます。'},
-                {id: 3, img: require('@/assets/images/image03.jpg'), title: '節約テクニック5選', body: '節約のテクニックを解説していきます。'},
-                {id: 4, img: require('@/assets/images/image04.jpg'), title: '節約テクニック5選', body: '節約のテクニックを解説していきます。'},
-                {id: 5, img: require('@/assets/images/image05.jpg'), title: '節約テクニック5選', body: '節約のテクニックを解説していきます。'},
-            ]
+            articles: []
         }
     },
+    methods: {
+        async fetchArticles() {
+            const url = "http://localhost:8000/api/articles";
+            await axios.get(url)
+                .then((res) => {
+                    console.log(res.data);
+                    this.articles = res.data;
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        }
+    },
+    mounted() {
+        this.fetchArticles();
+    }
 })
 </script>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
 }
 
 .contents {
@@ -315,7 +335,7 @@ export default({
     padding: 50px;
     background-color: #f2e6da42;
     border-radius: 15px;
-    box-shadow: 5px 5px 3px rgba(171, 168, 168, 0.896);
+    box-shadow: 7px 5px 7px rgba(171, 168, 168, 0.896);
     table {
         width: 50%;
         margin: 50px 0;
@@ -327,7 +347,7 @@ export default({
     text-align: center;
     border: 2px solid black;
     padding: 50px;
-    box-shadow: 5px 3px 3px rgba(189, 183, 183, 0.784);
+    box-shadow: 7px 5px 7px rgba(171, 168, 168, 0.896);
     background-color: #f2e6da42;
     border-radius: 15px;
     table {
@@ -340,7 +360,7 @@ export default({
     margin: 100px auto;
     border: 2px solid black;
     padding: 50px;
-    box-shadow: 5px 3px 3px rgba(189, 183, 183, 0.784);
+    box-shadow: 7px 5px 7px rgba(171, 168, 168, 0.896);
     background-color: #f2e6da42;
     border-radius: 15px;
     .table-title {
@@ -384,7 +404,7 @@ export default({
     border: 2px solid black;
     padding: 50px 0;
     background-color: #fff;
-    box-shadow: 5px 3px 3px rgba(189, 183, 183, 0.784);
+    box-shadow: 7px 5px 7px rgba(171, 168, 168, 0.896);
     background-color: #f2e6da42;
     border-radius: 15px;
 }
@@ -407,26 +427,38 @@ export default({
     text-align: center;
     border: 2px solid black;
     padding: 50px;
-    box-shadow: 5px 3px 3px rgba(189, 183, 183, 0.784);
+    box-shadow: 7px 5px 7px rgba(171, 168, 168, 0.896);
     background-color: #f2e6da42;
     border-radius: 15px;
-}
-
-.article-contents {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
-    margin-top: 50px;
-    img {
-        width: 50%;
+    .article-inner {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        article {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            border: 1px solid black;
+            text-align: center;
+            flex-wrap: wrap;
+            margin-top: 50px;
+            width: 40%;
+            background-color: #fff;
+            box-shadow: 3px 5px 6px rgba(189, 183, 183, 0.784);
+            img {
+                width: 100%;
+            }
+            .article-text {
+                margin-top: 20px;
+                a {
+                    display: block;
+                    color: black;
+                    width: 100%;
+                    margin: 10px auto;
+                }
+            }
+        }
     }
-}
-
-.article-box {
-    border: 2px solid black;
-    padding: 20px;
-    width: 30vw;
 }
 
 </style>

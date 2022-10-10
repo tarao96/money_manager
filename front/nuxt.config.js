@@ -57,7 +57,7 @@ export default {
       login: '/login', 
       logout: '/login', 
       callback: false,
-      home: '/dashboard'
+      home: '/home'
     },
     strategies: {
         local: {
@@ -77,5 +77,8 @@ export default {
             }
         }
     },
+
+    middleware: ['auth'],
+
   }
 }
